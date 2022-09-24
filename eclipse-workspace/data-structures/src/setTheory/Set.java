@@ -1,22 +1,33 @@
+package setTheory;
+import java.util.ArrayList;
+//naive set theory with integers
 public class Set{
-	public ArrayList<MathObjs> set = new ArrayList();
+	public ArrayList<MathObjs> set;
 	private boolean isEmpty;
 	private int len;
-	
+	private String asString;
 	public Set() {
-		this.set = setAsEmpty(this.set);
+		this.set = new ArrayList<MathObjs>();
 		this.isEmpty = true;
 		this.len = 0;
 	}
 	
 	//get methods
-	public Set getSet() {
+	public ArrayList<MathObjs> getSet() {
 		return this.set;
 	}
+	
+
 	public boolean getIsEmpty() {
 		return this.isEmpty;
 	}
+	public void setLength(int num) {
+		this.len = num;
+	}
 	public int getLength() {
+		if(this.len != this.set.size()) {
+			this.setLength(this.set.size());
+		}
 		return this.len;
 	}
 	public MathObjs getElement(int i) {
@@ -32,9 +43,6 @@ public class Set{
 				this.set.remove(i);
 			}
 		}
-		else {
-			break;
-		}
 		
 	}
 	public void setArray(ArrayList<MathObjs> newSet) { //sets an array to the current object
@@ -49,7 +57,7 @@ public class Set{
 	
 	//set operations
 	public void addElement(MathObjs element) { //adds element to the current set
-		this.add(element);
+		this.set.add(element);
 	}
 	public void removeElement(int i) {
 		this.set.remove(i);
@@ -57,13 +65,12 @@ public class Set{
 	public Set union(Set someSet) { //The union of the object and another set
 		Set join = new Set();
 		int otherLen = someSet.getLength();
-		for(i=0; i < otherLen; i++) {
+		for(int i=0; i < otherLen; i++) {
 			join.addElement(someSet.getElement(i));
 		}
-		for (i=0; i<this.set.getLength(); i++) {
-			join.addElement(this.set.get(i)));
+		for (int i=0; i<this.getLength(); i++) {
+			join.addElement(this.set.get(i));
 		}
-		for(i = 0; i < join.getLength(); )
 		return join;
 	}
 	public static Set isLonger(Set setOne, Set setTwo) {
@@ -98,27 +105,36 @@ public class Set{
 	
 	}
 	public Set intersect(Set someSet) { //The intersection of the object and some other set
-		int otherLen = someSet.getLength();
 		Set joined = new Set();
 		Set longest = new Set();
 		Set shortest = new Set();
-		longest.setArray(isLonger(this.set, someSet));
-		shortest.setArray(isShorter(this.set, someSet));
+		
+		longest.setArray(isLonger(this, someSet).set);
+		shortest.setArray(isShorter(this, someSet).set);
 		if(longest.isEmpty || shortest.isEmpty) {
 			return joined; //the intersection of any set with the empty set is the empty set
 		}
-		for(i=0; i < longest.getLength(); i++) {
-			for(j = 0; j < shortest.length(); j++) {
-				if(shortest[i] != longest[j]) {
-					joined.addElement(shortest[i]);
-					joined.addElement(longest[j]);
+		for(int i=0; i < longest.getLength(); i++) {
+			for(int j = 0; j < shortest.getLength(); j++) {
+				if(shortest.getElement(i) != longest.getElement(i)) {
+					joined.addElement(shortest.getElement(i));
+					joined.addElement(longest.getElement(i));
 					joined.isEmpty = false;
 				}else {
-					joined.addElement(shortest[i]);
+					joined.addElement(shortest.getElement(i));
 					joined.isEmpty = false;
 				}
 			}
 		}
 		return joined;
 	}
+	public void printSet() {
+		this.asString = "{";
+		for(int i = 0; i < this.len; i++) {
+			this.asString += this.getElement(i).getValue() + ", ";
+		}
+		this.asString += "}";
+		System.out.println(asString);
+	}
+
 }
